@@ -40,7 +40,17 @@ done
 echo "==== initialized, starting service"
 inotifywait -r --format '%w' -e modify,attrib,move,create,delete ${SRC} |
     while read p; do
-        for format in ${FORMATS}; do
-            convert "$p" "$format"
-        done
+        if test -f "-p"; then
+            for format in ${FORMATS}; do
+                convert "$p" "$format"
+            done
+        else
+            for format in ${FORMATS}; do
+                t=$(target "$f" "$format")
+                if test -f "$t"; then
+                    echo "---- $t"
+                    rm "$t"
+                fi
+            done
+        fi
     done
