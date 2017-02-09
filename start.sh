@@ -38,9 +38,9 @@ for f in $(find $SRC -name '.*' -prune -o -type f -print); do
 done
 
 echo "==== $(date) initialized, starting service"
-inotifywait -r --format '%w' -e modify,attrib,move,create,delete ${SRC} |
+inotifywait -m -r --format '%w' -e modify,attrib,move,create,delete ${SRC} |
     while read p; do
-        if test -f "-p"; then
+        if test -f "$p"; then
             for format in ${FORMATS}; do
                 convert "$p" "$format"
             done
